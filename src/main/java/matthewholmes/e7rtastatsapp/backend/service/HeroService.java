@@ -27,14 +27,21 @@ public class HeroService {
 		Hero hero = new Hero();
 		hero.setName(request.getName());
 		hero.setElement(request.getElement());
-		hero.setHClass(request.getHClass());
-		
-		// TODO: save to repo
-		
+		hero.setHeroClass(request.getHeroClass());
+
 		Hero saved = heroRepository.save(hero);
-		// TODO: create & send response object
 		
 		return mapToResponse(saved);
+	}
+
+	@Transactional(readOnly = true)
+	public List<HeroResponse> getAllHeroes() {
+		// TODO: user authentication
+		List<Hero> heroes = heroRepository.findAll();
+		return heroes
+				.stream()
+				.map(this::mapToResponse)
+				.collect(Collectors.toList());
 	}
 	
 	@Transactional(readOnly = true)
@@ -68,7 +75,7 @@ public class HeroService {
 	@Transactional(readOnly = true)
 	public List<HeroResponse> getHeroesByElement(HeroElement element) {
 		// TODO: user authentication
-		List<Hero> heroes = heroRepository.findAllByHeroElement(element);
+		List<Hero> heroes = heroRepository.findAllByElement(element);
 		return heroes
 				.stream()
 				.map(this::mapToResponse)
@@ -88,7 +95,7 @@ public class HeroService {
 	@Transactional(readOnly = true)
 	public List<HeroResponse> getHeroesByElementAndHeroClass(HeroElement element, HeroClass hClass) {
 		// TODO: user authentication
-		List<Hero> heroes = heroRepository.findAllByHeroElementAndHeroClass(element, hClass);
+		List<Hero> heroes = heroRepository.findAllByElementAndHeroClass(element, hClass);
 		return heroes
 				.stream()
 				.map(this::mapToResponse)
@@ -103,7 +110,7 @@ public class HeroService {
 		
 		hero.setName(request.getName());
 		hero.setElement(request.getElement());
-		hero.setHClass(request.getHClass());
+		hero.setHeroClass(request.getHeroClass());
 		
 		Hero updated = heroRepository.save(hero);
 		return mapToResponse(updated);
@@ -123,8 +130,7 @@ public class HeroService {
 				.id(hero.getId())
 				.name(hero.getName())
 				.element(hero.getElement())
-				.hClass(hero.getHClass())
-				.appearances(hero.getAppearances())
+				.heroClass(hero.getHeroClass())
 				.createdAt(hero.getCreatedAt())
 				.updatedAt(hero.getUpdatedAt())
 				.build();

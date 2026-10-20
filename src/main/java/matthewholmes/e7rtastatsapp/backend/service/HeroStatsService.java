@@ -21,4 +21,5 @@ public class HeroStatsService {
 		
 		return totalAppearances > 0 ? (double)(100f * totalWins/totalAppearances) : 0f;
 	}
+
 }

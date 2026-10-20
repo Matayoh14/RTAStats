@@ -29,6 +29,12 @@ public class Match {
 	@Column(nullable = false)
 	private boolean fpWin; // true = 1st pick/Team1 won, false = 2nd pick/Team2 won
 	
+	@ManyToMany
+	@JoinTable(
+	    name = "match_prebans",
+	    joinColumns = @JoinColumn(name = "match_id"),
+	    inverseJoinColumns = @JoinColumn(name = "hero_id")
+	)
 	private List<Hero> prebans = new ArrayList<>();
 	
 	private LocalDateTime createdAt;

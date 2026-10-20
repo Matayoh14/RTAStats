@@ -32,7 +32,12 @@ public class HeroController {
 	public ResponseEntity<HeroResponse> createHero(@Valid @RequestBody HeroRequest request) {
 		return new ResponseEntity<>(heroService.createHero(request), HttpStatus.CREATED);
 	}
-	
+
+	@GetMapping()
+	public ResponseEntity<List<HeroResponse>> getAllHeroes() {
+		return ResponseEntity.ok(heroService.getAllHeroes());
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<HeroResponse> getHeroById(@PathVariable String id) {
 		return ResponseEntity.ok(heroService.getHeroById(id));

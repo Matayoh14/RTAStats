@@ -13,7 +13,7 @@ public interface HeroRepository extends JpaRepository<Hero, String>{
 	Optional<Hero> findById(String id);
 	Optional<Hero> findByName(String name);
 	List<Hero> findAllByNameContains(String name);
-	List<Hero> findAllByHeroElement(Hero.HeroElement element);
+	List<Hero> findAllByElement(Hero.HeroElement element);
 	List<Hero> findAllByHeroClass(Hero.HeroClass hclass);
-	List<Hero> findAllByHeroElementAndHeroClass(Hero.HeroElement element, Hero.HeroClass hclass);
+	List<Hero> findAllByElementAndHeroClass(Hero.HeroElement element, Hero.HeroClass hclass);
 }

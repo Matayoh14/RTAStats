@@ -21,14 +21,14 @@ public class Hero {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String name;
 	
 	@Enumerated(EnumType.STRING)
 	private HeroElement element;
 	
 	@Enumerated(EnumType.STRING)
-	private HeroClass hClass;
+	private HeroClass heroClass;
 	
     @OneToMany(mappedBy = "hero", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MatchHero> appearances = new ArrayList<>();

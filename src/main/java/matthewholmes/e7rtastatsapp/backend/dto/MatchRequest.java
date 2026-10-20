@@ -1,20 +1,22 @@
 package matthewholmes.e7rtastatsapp.backend.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import matthewholmes.e7rtastatsapp.backend.model.Hero;
-import matthewholmes.e7rtastatsapp.backend.model.MatchHero;
 
 @Data
 public class MatchRequest {
 
-	@NotNull(message = "MatchHeroes are required")
-	private List<MatchHero> picks;
-	
-	@NotNull
+	@NotNull(message = "Picks are required")
+	@Size(min = 10, max = 10, message = "A match needs exactly 10 picks (5 per team)")
+	@Valid
+	private List<MatchHeroRequest> picks;
+
 	private boolean fpWin;
 	
-	private List<Hero> prebans;
+	private List<String> prebanHeroIds = new ArrayList<>();
 }

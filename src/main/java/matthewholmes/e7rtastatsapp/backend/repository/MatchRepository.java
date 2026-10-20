@@ -13,6 +13,8 @@ import matthewholmes.e7rtastatsapp.backend.model.Match;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, String> {
 	Optional<Match> findById(String id);
+	
+	List<Match> findAllByOrderByCreatedAtDesc();
 
 	@Query("SELECT DISTINCT m FROM Match m JOIN m.picks p WHERE p.hero.id = :heroId")
     List<Match> findMatchesByHeroId(@Param("heroId") String heroId);

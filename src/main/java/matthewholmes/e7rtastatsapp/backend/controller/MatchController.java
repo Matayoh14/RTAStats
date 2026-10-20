@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import matthewholmes.e7rtastatsapp.backend.dto.MatchRequest;
 import matthewholmes.e7rtastatsapp.backend.dto.MatchResponse;
@@ -26,8 +27,13 @@ public class MatchController {
 	private final MatchService matchService;
 	
 	@PostMapping
-	public ResponseEntity<MatchResponse> createMatch(@RequestBody MatchRequest request) {
+	public ResponseEntity<MatchResponse> createMatch(@Valid @RequestBody MatchRequest request) {
 		return new ResponseEntity<>(matchService.createMatch(request), HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<MatchResponse>> getAllMatches() {
+		return ResponseEntity.ok(matchService.getAllMatches());
 	}
 	
 	@GetMapping("/{id}")
@@ -56,7 +62,7 @@ public class MatchController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<MatchResponse> updateMatch(@RequestBody MatchRequest request, @PathVariable String id) {
+	public ResponseEntity<MatchResponse> updateMatch(@Valid @RequestBody MatchRequest request, @PathVariable String id) {
 		return ResponseEntity.ok(matchService.updateMatch(request, id));
 	}
 	

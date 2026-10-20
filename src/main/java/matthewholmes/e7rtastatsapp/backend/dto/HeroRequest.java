@@ -13,5 +13,5 @@ public class HeroRequest {
 	
 	private HeroElement element;
 	
-	private HeroClass hClass;
+	private HeroClass heroClass;
 }

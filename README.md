@@ -4,10 +4,7 @@ A full-stack statistics application for **Epic Seven**'s ranked draft mode (RTA)
 
 > **Status:** work in progress. The core data pipeline (enter matches, store them, rank heroes) and an admin area are working. Authentication and personal-versus-global analysis are next. See the [Roadmap](#roadmap).
 
-<!-- Add a screenshot or short GIF here. This is the first thing a reader sees.
-![Homepage showing the top 20 heroes by win rate](docs/screenshots/home.png)
--->
-e7rtastatsapp-frontend/src/assets/RTAStatsScreenshot.png
+<img width="820" height="452" alt="image" src="https://github.com/user-attachments/assets/8248c1d5-dc98-4abf-8fcd-a544ec498de3" />
 
 ## Table of contents
 

@@ -1,0 +1,51 @@
+.hero-table {
+    width: 100%;
+    max-width: 640px;
+    margin: 1.5rem auto;
+    border-collapse: collapse;
+    font-size: 1rem;
+    color: #1f2328;
+}
+
+.hero-table caption {
+    margin-bottom: 0.75rem;
+    text-align: left;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.hero-table th,
+.hero-table td {
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+}
+
+.hero-table th {
+    border-bottom: 2px solid #1f2328;
+    font-weight: 600;
+}
+
+.hero-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Row colour per element */
+.hero-table tbody tr[data-element="EARTH"] { background: #dcefd9; } /* pale green  */
+.hero-table tbody tr[data-element="FIRE"]  { background: #f6d5d2; } /* pale red    */
+.hero-table tbody tr[data-element="ICE"] { background: #d6e6f5; } /* pale blue   */
+.hero-table tbody tr[data-element="DARK"]  { background: #e2d8f0; } /* pale purple */
+.hero-table tbody tr[data-element="LIGHT"] { background: #f3ead3; } /* beige       */
+
+.hero-table tbody tr + tr td {
+    border-top: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

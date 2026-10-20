@@ -1,0 +1,95 @@
+.hero-admin {
+    max-width: 760px;
+    margin: 1.5rem auto;
+    padding: 1.25rem;
+    background: #fafafa;
+    color: #1f2328;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.hero-admin h2 {
+    margin: 0 0 1rem;
+}
+
+.hero-admin__form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem 1rem;
+    align-items: end;
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border: 1px solid #c9ced6;
+    border-radius: 6px;
+}
+
+.hero-admin__form h3 {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.hero-admin__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.hero-admin input,
+.hero-admin select {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #9aa3ad;
+    border-radius: 4px;
+    background: #fff;
+    color: #1f2328;
+    font: inherit;
+    font-weight: 400;
+}
+
+.hero-admin__buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.hero-admin button {
+    padding: 0.45rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background: #1f2328;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.hero-admin button.secondary {
+    background: #e3e6ea;
+    color: #1f2328;
+}
+
+.hero-admin button.danger {
+    background: #b42318;
+}
+
+.hero-admin button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.hero-admin__error {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #b42318;
+}
+
+.hero-admin .hero-table {
+    max-width: none;
+    margin: 0;
+}
+
+.hero-table td.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}

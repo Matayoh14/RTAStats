@@ -18,6 +18,7 @@ public class MatchResponse {
 	private List<MatchHeroResponse> picks;
 	private boolean fpWin;
 	private List<HeroResponse> prebans;
+	private int userTeam;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 }

@@ -19,6 +19,36 @@ const emptySide = () => ({
 })
 const emptySides = () => ({ left: emptySide(), right: emptySide() })
 
+// Converts a saved match (MatchResponse) into form state for editing.
+// The left side is the logger's own team (match.userTeam) and the right side is the opponent.
+// Team 1 is always the first-pick team, so the left side picked first when userTeam is 1.
+// Preban sides aren't stored, so the flat list fills the left slots first, then the right.
+function toFormState(match) {
+    const sides = emptySides()
+    const userTeam = match.userTeam === 2 ? 2 : 1
+    const sideForTeam = { [userTeam]: 'left', [userTeam === 1 ? 2 : 1]: 'right' }
+
+    for (const pick of match.picks) {
+        const side = sides[sideForTeam[pick.team]]
+        const index = pick.pickOrder - 1
+        if (!side || index < 0 || index >= PICKS_PER_SIDE) continue // corrupt row: leave the slot empty
+        side.picks[index] = pick.heroName
+        if (pick.banned) side.postban = index
+    }
+
+    const prebanSlots = [['left', 0], ['left', 1], ['right', 0], ['right', 1]]
+    match.prebans.slice(0, prebanSlots.length).forEach((hero, i) => {
+        const [side, index] = prebanSlots[i]
+        sides[side].prebans[index] = hero.name
+    })
+
+    return {
+        victory: userTeam === 1 ? match.fpWin : !match.fpWin,
+        firstPick: userTeam === 1 ? 'left' : 'right',
+        sides,
+    }
+}
+
 const lookup = (heroByName, text) => heroByName.get(text.trim().toLowerCase())
 
 // Returns an object of { 'left.picks.2': 'message', ... }. Empty object means valid.
@@ -41,6 +71,9 @@ function validate(sides, heroByName) {
             pickOwners.set(hero.id, [...(pickOwners.get(hero.id) ?? []), field])
         })
 
+        // Prebans are optional, and both players choose at the same time, so they may overlap
+        // with the other side's prebans (and with picks). Beyond "is a known hero", the only
+        // check is that one player doesn't preban the same hero in both of their own slots.
         const prebanOwners = new Map()
         sides[side].prebans.forEach((name, i) => {
             const field = `${side}.prebans.${i}`
@@ -81,6 +114,7 @@ function buildMatchRequest({ victory, firstPick, sides, heroByName }) {
     return {
         // The first-pick side is always team 1. Victory refers to the left side, so the
         // first-pick team won if (left won and left picked first) or (left lost and right picked first).
+        userTeam: firstPick === 'left' ? 1 : 2, // left is the logger's team; team 1 is the first-pick team
         fpWin: victory === (firstPick === 'left'),
         picks: [...picksFor(firstPick, 1), ...picksFor(secondPick, 2)],
         prebanHeroIds: [...sides.left.prebans, ...sides.right.prebans]
@@ -107,11 +141,15 @@ function HeroInput({ value, onChange, label, error }) {
     )
 }
 
-function MatchForm() {
+// No props = "add a new match". Pass `match` to edit an existing one (and `onDone` to close the editor).
+// useState only reads its initial value once, so give the component key={match.id} when switching matches.
+function MatchForm({ match = null, onDone }) {
     const queryClient = useQueryClient()
-    const [victory, setVictory] = useState(false)
-    const [firstPick, setFirstPick] = useState('left')
-    const [sides, setSides] = useState(emptySides)
+    const isEditing = match !== null
+    const [initial] = useState(() => (match ? toFormState(match) : null))
+    const [victory, setVictory] = useState(initial?.victory ?? false)
+    const [firstPick, setFirstPick] = useState(initial?.firstPick ?? 'left')
+    const [sides, setSides] = useState(initial?.sides ?? emptySides())
     const [submitted, setSubmitted] = useState(false)
 
     const heroesQuery = useQuery({ queryKey: ['heroes'], queryFn: heroApi.getAll })
@@ -136,12 +174,14 @@ function MatchForm() {
     }
 
     const mutation = useMutation({
-        mutationFn: matchApi.create,
+        mutationFn: (request) =>
+            isEditing ? matchApi.update(match.id, request) : matchApi.create(request),
         onSuccess: () => {
             // Refresh anything derived from match data (the homepage table uses these keys)
             queryClient.invalidateQueries({ queryKey: ['matches'] })
             queryClient.invalidateQueries({ queryKey: ['stats'] })
-            resetForm()
+            if (isEditing) onDone?.()
+            else resetForm()
         },
     })
 
@@ -171,7 +211,7 @@ function MatchForm() {
 
     return (
         <form className="match-form" onSubmit={handleSubmit} noValidate>
-            <h2>Add match</h2>
+            <h2>{isEditing ? 'Edit match' : 'Add match'}</h2>
 
             <datalist id="hero-options">
                 {heroNames.map((name) => (
@@ -252,9 +292,14 @@ function MatchForm() {
                 <p role="status" className="match-form__success">Match saved.</p>
             )}
 
-            <button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? 'Saving...' : 'Submit match'}
-            </button>
+            <div className="match-form__buttons">
+                <button type="submit" disabled={mutation.isPending}>
+                    {mutation.isPending ? 'Saving...' : isEditing ? 'Save changes' : 'Submit match'}
+                </button>
+                {isEditing && (
+                    <button type="button" className="secondary" onClick={onDone}>Cancel</button>
+                )}
+            </div>
         </form>
     )
 }

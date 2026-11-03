@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -19,4 +21,8 @@ public class MatchRequest {
 	private boolean fpWin;
 	
 	private List<String> prebanHeroIds = new ArrayList<>();
+	
+	@Min(value = 1, message = "userTeam must be 1 or 2")
+	@Max(value = 2, message = "userTeam must be 1 or 2")
+	private int userTeam;
 }

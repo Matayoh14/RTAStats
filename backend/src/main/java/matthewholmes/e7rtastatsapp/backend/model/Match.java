@@ -37,6 +37,9 @@ public class Match {
 	)
 	private List<Hero> prebans = new ArrayList<>();
 	
+	@Column(nullable = false)
+	private int userTeam; // 1 or 2 (1 = fpTeam, 2 = 2nd pick)
+	
 	private LocalDateTime createdAt;
 	
 	private LocalDateTime updatedAt;

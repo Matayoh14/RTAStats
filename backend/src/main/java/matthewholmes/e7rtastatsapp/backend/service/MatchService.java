@@ -119,6 +119,7 @@ public class MatchService {
 				.fpWin(match.isFpWin())
 				.picks(match.getPicks().stream().map(this::toMatchHeroResponse).toList())
 				.prebans(match.getPrebans().stream().map(this::toHeroResponse).toList())
+				.userTeam(match.getUserTeam())
 				.createdAt(match.getCreatedAt())
 				.updatedAt(match.getUpdatedAt())
 				.build();
@@ -162,6 +163,7 @@ public class MatchService {
 		};
 
 		match.setFpWin(request.isFpWin());
+		match.setUserTeam(request.getUserTeam());
 
 		match.getPicks().clear();
 		for (MatchHeroRequest p : request.getPicks()) {

@@ -1,0 +1,12 @@
+# Environment files: real values never go in git, examples do
+.env
+.env.*
+!.env.example
+
+# OS and editor leftovers
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+

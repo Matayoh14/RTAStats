@@ -11,6 +11,13 @@ nav {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
 }
 
+nav button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
 nav a,
 nav a:visited,
 nav a:hover,

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import TopHeroesTable from './TopHeroesTable.jsx';
 import MatchForm from './MatchForm.jsx';
 import AdminPage from './AdminPage.jsx';
+import AuthForm from './AuthForm.jsx';
 
 function RTAStatsApp() {
     return (
@@ -14,6 +15,8 @@ function RTAStatsApp() {
                     <Route path="/heroes" element={<h1>Heroes</h1>}/>
                     <Route path="/form" element={<MatchForm />}/>
                     <Route path="/admin/*" element={<AdminPage />}/>
+                    <Route path="/login" element={<AuthForm mode="login" />} />
+                    <Route path="/register" element={<AuthForm mode="register" />} />
                 </Routes>
             </main>
         </BrowserRouter >

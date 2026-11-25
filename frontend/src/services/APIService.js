@@ -6,6 +6,33 @@ const api = axios.create({
     timeout: 10000,
 });
 
+// Authentication
+let authToken = null
+export const setAuthToken = (token) => { authToken = token }
+
+let onUnauthorized = () => {}
+export const setUnauthorizedHandler = (handler) => { onUnauthorized = handler }
+
+api.interceptors.request.use((config) => {
+    if (authToken) config.headers.Authorization = `Bearer ${authToken}`
+    return config
+})
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const isAuthCall = error.config?.url?.startsWith('/auth/')
+        if (error.response?.status === 401 && !isAuthCall) onUnauthorized()
+        return Promise.reject(error)
+    }
+)
+
+export const authApi = {
+    register: (email, password) => api.post('/auth/register', { email, password }).then(data),
+    login: (email, password) => api.post('/auth/login', { email, password }).then(data),
+    me: () => api.get('/auth/me').then(data),
+}
+
 // Path segments
 const seg = (value) => encodeURIComponent(value);
 const data = (res) => res.data;
